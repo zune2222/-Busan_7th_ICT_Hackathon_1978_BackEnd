@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Role } from 'src/auth/roles.decorator';
 import { User } from 'src/entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
@@ -13,16 +15,16 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  // admin 역할 부여해서 권한 강화하기
-  @UseGuards(JwtAuthGuard)
   @Get()
+  @Role('admin')
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   getAll(): Promise<User[]> {
     return this.userService.getAll();
   }
 
-  // admin 역할 부여해서 권한 강화하기
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   getByUserId(@Param('id') id: string): Promise<User> {
     return this.userService.getByUserId(id);
   }
