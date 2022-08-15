@@ -3,17 +3,35 @@ import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  seq: number;
-
-  @Column()
-  userName: string;
+  _id: Number;
 
   @PrimaryColumn({ unique: true })
-  userId: string;
+  id: string;
 
   @Column()
   password: string;
 
   @Column()
-  role: string;
+  nickname: string;
+
+  @Column()
+  salt: string;
+
+  @Column()
+  room: string;
+
+  @Column()
+  visible: boolean;
+
+  @Column()
+  job: Number;
+
+  @Column()
+  major: Number;
+
+  @Column()
+  gender: Number;
+
+  @Column()
+  birthDay: Date;
 }

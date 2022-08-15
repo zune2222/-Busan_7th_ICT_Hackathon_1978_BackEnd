@@ -2,8 +2,19 @@ import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { GetByUserIdResponseDto } from './dto/get-by-userId.dto';
+import { GetAllResponseDto } from './dto/get-all.dto';
+import { CreateUserResponseDto } from './dto/create-user.dto';
+
+class CreateUserDto {
+  id: string;
+  password: string;
+  job: Number;
+  major: Number;
+  gender: Number;
+  birthDay: Date;
+}
 
 @Injectable()
 export class UserService {
@@ -12,9 +23,9 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<any> {
+  async create(createUserDto: CreateUserDto): Promise<CreateUserResponseDto> {
     const isExist = await this.userRepository.findOneBy({
-      userId: createUserDto.userId,
+      id: createUserDto.id,
     });
     if (isExist) {
       throw new ForbiddenException({
@@ -25,20 +36,18 @@ export class UserService {
     }
 
     createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
-    const { password, ...result } = await this.userRepository.save(
-      createUserDto,
-    );
+    const result = await this.userRepository.save(createUserDto);
     return result;
   }
 
-  async getAll(): Promise<User[]> {
+  async getAll(): Promise<GetAllResponseDto> {
     return this.userRepository.find({
-      select: ['seq', 'userId', 'userName', 'role'],
+      select: ['_id', 'id'],
     });
   }
 
-  async getByUserId(id: string): Promise<any> {
-    const isExist = await await this.userRepository.findOneBy({ userId: id });
+  async getByUserId(id: string): Promise<GetByUserIdResponseDto> {
+    const isExist = await this.userRepository.findOneBy({ id: id });
     if (!isExist) {
       throw new ForbiddenException({
         statusCode: HttpStatus.FORBIDDEN,
@@ -46,8 +55,8 @@ export class UserService {
         error: 'Forbidden',
       });
     }
-    const { password, ...result } = await this.userRepository.findOneBy({
-      userId: id,
+    const result = await this.userRepository.findOneBy({
+      id: id,
     });
     return result;
   }
