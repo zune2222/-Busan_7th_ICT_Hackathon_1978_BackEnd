@@ -1,0 +1,16 @@
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class Calender {
+  @PrimaryGeneratedColumn()
+  _id: number;
+
+  @Column()
+  userId: string;
+
+  @Column()
+  month: Number;
+
+  @Column()
+  like: Number;
+}
