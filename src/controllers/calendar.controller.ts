@@ -28,7 +28,9 @@ export class CalendarController {
   }
 
   @Get(':userId')
-  getByUserId(@Param('userId') userId: string): Promise<Calender[]> {
+  getByUserId(
+    @Param('userId') userId: string,
+  ): Promise<GetCalendarAllResponseDto> {
     return this.calendarService.getByUserId(userId);
   }
 
