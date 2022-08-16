@@ -9,8 +9,8 @@ export class Calender {
   userId: string;
 
   @Column()
-  month: Number;
+  month: number;
 
   @Column()
-  like: Number;
+  like: number;
 }

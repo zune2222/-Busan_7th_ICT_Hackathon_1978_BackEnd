@@ -2,8 +2,8 @@ import { IsNumber } from 'class-validator';
 
 export class UpdateCalendarRequestDto {
   @IsNumber()
-  month: Number;
+  month: number;
 
   @IsNumber()
-  like: Number;
+  like: number;
 }

@@ -5,14 +5,15 @@ export class CreateCalendarRequestDto {
   userId: string;
 
   @IsNumber()
-  month: Number;
+  month: number;
 
   @IsNumber()
-  like: Number;
+  like: number;
 }
 
 export interface CreateCalendarResponseDto {
+  _id: number;
   userId: string;
-  month: Number;
-  like: Number;
+  month: number;
+  like: number;
 }
