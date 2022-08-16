@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  _id: Number;
+  _id: number;
 
   @PrimaryColumn({ unique: true })
   id: string;
@@ -24,13 +24,13 @@ export class User {
   visible: boolean;
 
   @Column()
-  job: Number;
+  job: number;
 
   @Column()
-  major: Number;
+  major: number;
 
   @Column()
-  gender: Number;
+  gender: number;
 
   @Column()
   birthDay: Date;
