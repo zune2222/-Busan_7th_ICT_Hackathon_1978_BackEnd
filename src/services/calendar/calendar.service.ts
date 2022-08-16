@@ -36,7 +36,7 @@ export class CalendarService {
     return await this.calendarRepository.save(createCalendarRequestDto);
   }
 
-  async getByUserId(userId: string): Promise<Calender[]> {
+  async getByUserId(userId: string): Promise<GetCalendarAllResponseDto> {
     const isExist = await this.calendarRepository.findBy({
       userId: userId,
     });
