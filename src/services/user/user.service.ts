@@ -10,9 +10,9 @@ import { CreateUserResponseDto } from './dto/create-user.dto';
 class CreateUserDto {
   id: string;
   password: string;
-  job: Number;
-  major: Number;
-  gender: Number;
+  job: number;
+  major: number;
+  gender: number;
   birthDay: Date;
 }
 
@@ -23,9 +23,9 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<CreateUserResponseDto> {
+  async create(newUser: CreateUserDto): Promise<CreateUserResponseDto> {
     const isExist = await this.userRepository.findOneBy({
-      id: createUserDto.id,
+      id: newUser.id,
     });
     if (isExist) {
       throw new ForbiddenException({
@@ -35,8 +35,8 @@ export class UserService {
       });
     }
 
-    createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
-    const result = await this.userRepository.save(createUserDto);
+    newUser.password = await bcrypt.hash(newUser.password, 10);
+    const result = await this.userRepository.save(newUser);
     return result;
   }
 

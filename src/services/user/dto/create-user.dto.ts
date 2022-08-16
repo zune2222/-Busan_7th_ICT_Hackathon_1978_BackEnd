@@ -8,13 +8,13 @@ export class CreateUserRequestDto {
   password: string;
 
   @IsNumber()
-  job: Number;
+  job: number;
 
   @IsNumber()
-  major: Number;
+  major: number;
 
   @IsNumber()
-  gender: Number;
+  gender: number;
 
   @IsDate()
   birthDay: Date;
@@ -24,7 +24,7 @@ export interface CreateUserResponseDto {
   id: string;
   password: string;
   job: Number;
-  major: Number;
-  gender: Number;
+  major: number;
+  gender: number;
   birthDay: Date;
 }

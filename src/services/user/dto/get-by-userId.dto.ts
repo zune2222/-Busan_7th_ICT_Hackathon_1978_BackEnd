@@ -1,8 +1,8 @@
 export interface GetByUserIdResponseDto {
-  _id: Number;
+  _id: number;
   visible: boolean;
-  job: Number;
-  major: Number;
-  gender: Number;
+  job: number;
+  major: number;
+  gender: number;
   birthDay: Date;
 }

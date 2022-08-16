@@ -15,5 +15,5 @@ export class DailyLog {
   date: Date;
 
   @Column()
-  progress: Number;
+  progress: number;
 }

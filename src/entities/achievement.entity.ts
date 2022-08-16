@@ -18,5 +18,5 @@ export class Achievement {
   endTime: Date;
 
   @Column()
-  progess: Number;
+  progess: number;
 }

@@ -7,7 +7,6 @@ import {
   Post,
   Delete,
 } from '@nestjs/common';
-import { Calender } from 'src/entities/calendar.entity';
 import { CalendarService } from 'src/services/calendar/calendar.service';
 import {
   CreateCalendarRequestDto,
@@ -22,22 +21,24 @@ export class CalendarController {
 
   @Post()
   create(
-    @Body() createCalendarRequestDto: CreateCalendarRequestDto,
+    @Body() body: CreateCalendarRequestDto,
   ): Promise<CreateCalendarResponseDto> {
-    return this.calendarService.create(createCalendarRequestDto);
+    return this.calendarService.create(body);
   }
 
   @Get(':userId')
-  getByUserId(@Param('userId') userId: string): Promise<Calender[]> {
+  getByUserId(
+    @Param('userId') userId: string,
+  ): Promise<GetCalendarAllResponseDto> {
     return this.calendarService.getByUserId(userId);
   }
 
   @Patch(':userId')
   update(
     @Param('userId') userId: string,
-    @Body() updateCalendarRequestDto: UpdateCalendarRequestDto,
+    @Body() body: UpdateCalendarRequestDto,
   ): Promise<void> {
-    return this.calendarService.update(userId, updateCalendarRequestDto);
+    return this.calendarService.update(userId, body);
   }
 
   @Delete(':userId')

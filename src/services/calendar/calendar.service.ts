@@ -17,11 +17,11 @@ export class CalendarService {
   ) {}
 
   async create(
-    createCalendarRequestDto: CreateCalendarRequestDto,
+    newCalender: CreateCalendarRequestDto,
   ): Promise<CreateCalendarResponseDto> {
     const isExist = await this.calendarRepository.findOneBy({
-      userId: createCalendarRequestDto.userId,
-      month: createCalendarRequestDto.month,
+      userId: newCalender.userId,
+      month: newCalender.month,
     });
 
     console.log(isExist);
@@ -33,7 +33,7 @@ export class CalendarService {
       });
     }
 
-    return await this.calendarRepository.save(createCalendarRequestDto);
+    return await this.calendarRepository.save(newCalender);
   }
 
   async getByUserId(userId: string): Promise<GetCalendarAllResponseDto> {
@@ -54,12 +54,12 @@ export class CalendarService {
 
   async update(
     userId: string,
-    updateCalendarRequestDto: UpdateCalendarRequestDto,
+    updateCalendar: UpdateCalendarRequestDto,
   ): Promise<void> {
     const isExist = (
       await this.calendarRepository.findBy({ userId: userId })
     ).filter((now) => {
-      return now.month !== updateCalendarRequestDto.month;
+      return now.month !== updateCalendar.month;
     });
     if (!isExist) {
       throw new ForbiddenException({
@@ -69,7 +69,7 @@ export class CalendarService {
       });
     }
 
-    const { month, like } = updateCalendarRequestDto;
+    const { month, like } = updateCalendar;
     await this.calendarRepository.update(
       { userId: userId },
       { month: month, like: like },
