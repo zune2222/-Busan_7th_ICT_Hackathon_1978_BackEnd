@@ -5,7 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 class payLoadDto {
   id: string;
   nickname: string;
-  _id: Number;
+  _id: number;
 }
 
 @Injectable()

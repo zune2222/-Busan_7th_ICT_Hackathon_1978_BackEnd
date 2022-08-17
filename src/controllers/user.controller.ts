@@ -13,10 +13,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(
-    @Body() createUserDto: CreateUserRequestDto,
-  ): Promise<CreateUserResponseDto> {
-    return this.userService.create(createUserDto);
+  create(@Body() body: CreateUserRequestDto): Promise<CreateUserResponseDto> {
+    return this.userService.create(body);
   }
 
   @Get()

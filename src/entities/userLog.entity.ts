@@ -18,5 +18,5 @@ export class UserLog {
   endTime: Date;
 
   @Column()
-  position: Number;
+  position: number;
 }

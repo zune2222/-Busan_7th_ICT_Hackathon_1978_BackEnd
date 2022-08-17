@@ -1,5 +1,5 @@
 interface GetAllDto {
-  _id: Number;
+  _id: number;
   id: string;
 }
 
