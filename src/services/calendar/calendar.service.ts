@@ -57,7 +57,7 @@ export class CalendarService {
   ): Promise<void> {
     const isExist = await this.calendarRepository.findOneBy({
       userId: userId,
-      month: updateCalendarRequestDto.month,
+      month: updateCalendar.month,
     });
 
     if (!isExist) {
