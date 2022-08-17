@@ -24,7 +24,6 @@ export class CalendarService {
       month: newCalender.month,
     });
 
-    console.log(isExist);
     if (isExist) {
       throw new ForbiddenException({
         statusCode: HttpStatus.FORBIDDEN,
@@ -56,11 +55,11 @@ export class CalendarService {
     userId: string,
     updateCalendar: UpdateCalendarRequestDto,
   ): Promise<void> {
-    const isExist = (
-      await this.calendarRepository.findBy({ userId: userId })
-    ).filter((now) => {
-      return now.month !== updateCalendar.month;
+    const isExist = await this.calendarRepository.findOneBy({
+      userId: userId,
+      month: updateCalendarRequestDto.month,
     });
+
     if (!isExist) {
       throw new ForbiddenException({
         statusCode: HttpStatus.FORBIDDEN,
