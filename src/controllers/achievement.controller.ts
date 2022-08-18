@@ -42,7 +42,7 @@ export class AchievementController {
   }
 
   @Delete()
-  delete(@Body() id: number): Promise<void> {
-    return this.achievementService.delete(id);
+  delete(@Body() _id: number): Promise<void> {
+    return this.achievementService.delete(_id);
   }
 }

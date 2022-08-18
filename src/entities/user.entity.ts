@@ -15,9 +15,6 @@ export class User {
   nickname: string;
 
   @Column()
-  salt: string;
-
-  @Column()
   room: string;
 
   @Column()

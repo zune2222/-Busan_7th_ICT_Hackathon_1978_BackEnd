@@ -1,4 +1,5 @@
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserRequestDto {
   @IsString()
@@ -16,13 +17,22 @@ export class CreateUserRequestDto {
   @IsNumber()
   gender: number;
 
+  @Type(() => Date)
   @IsDate()
   birthDay: Date;
+
+  @IsString()
+  nickname: string;
+
+  @IsString()
+  room: string;
+
+  @IsBoolean()
+  visible: boolean;
 }
 
 export interface CreateUserResponseDto {
   id: string;
-  password: string;
   job: Number;
   major: number;
   gender: number;
