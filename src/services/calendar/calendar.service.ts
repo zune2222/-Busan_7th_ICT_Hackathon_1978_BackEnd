@@ -53,11 +53,11 @@ export class CalendarService {
 
   async update(
     userId: string,
-    updateCalendarRequestDto: UpdateCalendarRequestDto,
+    updateCalendar: UpdateCalendarRequestDto,
   ): Promise<void> {
     const isExist = await this.calendarRepository.findOneBy({
       userId: userId,
-      month: updateCalendarRequestDto.month,
+      month: updateCalendar.month,
     });
 
     if (!isExist) {
@@ -68,7 +68,7 @@ export class CalendarService {
       });
     }
 
-    const { month, like } = updateCalendarRequestDto;
+    const { month, like } = updateCalendar;
     await this.calendarRepository.update(
       { userId: userId },
       { month: month, like: like },
