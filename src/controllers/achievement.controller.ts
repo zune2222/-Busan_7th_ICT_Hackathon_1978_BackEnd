@@ -25,12 +25,9 @@ export class AchievementController {
   @UseGuards(JwtAuthGuard)
   createAchievement(
     @Param('userId') userId: number,
-    @Body() createAchievementRequestDto: CreateAchievementRequestDto,
+    @Body() newAchievement: CreateAchievementRequestDto,
   ): Promise<CreateAchievementResponseDto> {
-    return this.achievementService.createAchievement(
-      userId,
-      createAchievementRequestDto,
-    );
+    return this.achievementService.createAchievement(userId, newAchievement);
   }
 
   @Get(':userId/achievement/:achievement_id')

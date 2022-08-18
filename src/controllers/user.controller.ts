@@ -13,10 +13,7 @@ import {
   CreateUserResponseDto,
 } from 'src/services/user/dto/create-user.dto';
 import { GetByUserIdResponseDto } from 'src/services/user/dto/get-by-userId.dto';
-import {
-  UpdateRoomRequestDto,
-  UpdateRoomResponseDto,
-} from 'src/services/user/dto/update-room.dto';
+import { UpdateRoomRequestDto } from 'src/services/user/dto/update-room.dto';
 import { UserService } from '../services/user/user.service';
 
 @Controller('/')
@@ -33,7 +30,7 @@ export class UserController {
   updateRoom(
     @Param() userId: number,
     @Body() body: UpdateRoomRequestDto,
-  ): Promise<UpdateRoomResponseDto> {
+  ): Promise<void> {
     return this.userService.updateRoom(userId, body);
   }
 
@@ -49,5 +46,14 @@ export class UserController {
     @Param('userId') userId: number,
   ): Promise<GetByUserIdResponseDto> {
     return this.userService.getByUserId(userId);
+  }
+
+  @Get('auth/user/:userId/daily/:dailyLogId/nagging')
+  @UseGuards(JwtAuthGuard)
+  nagging(
+    @Param('userId') userId: number,
+    @Param('dailyLogId') dailyLogId: number,
+  ): Promise<string> {
+    return this.userService.nagging(userId, dailyLogId);
   }
 }

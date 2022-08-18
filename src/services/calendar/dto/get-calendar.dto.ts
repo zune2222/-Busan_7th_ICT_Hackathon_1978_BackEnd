@@ -3,4 +3,5 @@ export interface GetCalendarResponseDto {
   userId: number;
   month: number;
   like: number;
+  dailyLogIds: Array<number>;
 }

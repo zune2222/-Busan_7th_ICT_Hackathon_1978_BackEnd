@@ -4,4 +4,5 @@ export interface GetDailyLogResponseDto {
   calendarId: number;
   date: Date;
   progress: number;
+  achievementIds: Array<number>;
 }

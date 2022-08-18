@@ -1,12 +1,9 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
+import { IsDate, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserRequestDto {
   @IsString()
-  loginId: string;
-
-  @IsNumber()
-  userId: number;
+  id: string;
 
   @IsString()
   password: string;
@@ -26,12 +23,6 @@ export class CreateUserRequestDto {
 
   @IsString()
   nickname: string;
-
-  @IsString()
-  room: string;
-
-  @IsBoolean()
-  visible: boolean;
 }
 
 export interface CreateUserResponseDto {

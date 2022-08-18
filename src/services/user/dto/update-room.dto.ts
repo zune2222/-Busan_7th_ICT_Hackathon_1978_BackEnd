@@ -1,10 +1,5 @@
 import { IsString } from 'class-validator';
 
 export class UpdateRoomRequestDto {
-  @IsString()
-  room: string;
-}
-
-export interface UpdateRoomResponseDto {
-  room: string;
+  room: Array<Array<number>>;
 }

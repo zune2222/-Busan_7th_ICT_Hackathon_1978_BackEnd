@@ -1,12 +1,15 @@
 import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Calender } from 'src/entities/calendar.entity';
+import { DailyLog } from 'src/entities/dailyLog.entity';
+import { Like } from 'src/entities/like.entity';
+import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
+import { GetCommunityResponseDto } from '../user/dto/get-community.dto';
 import {
   CreateCalendarRequestDto,
   CreateCalendarResponseDto,
 } from './dto/create-calendar.dto';
-import { GetCalendarAllResponseDto } from './dto/get-all';
 import { GetCalendarResponseDto } from './dto/get-calendar.dto';
 import { UpdateCalendarRequestDto } from './dto/update-calendar.dto';
 
@@ -15,6 +18,12 @@ export class CalendarService {
   constructor(
     @InjectRepository(Calender)
     private calendarRepository: Repository<Calender>,
+    @InjectRepository(DailyLog)
+    private dailyLogRepository: Repository<DailyLog>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(Like)
+    private likeRespository: Repository<Like>,
   ) {}
 
   async create(
@@ -53,11 +62,17 @@ export class CalendarService {
       });
     }
 
-    return isExist;
+    const dailyLogs = await this.dailyLogRepository.findBy({
+      calendarId: isExist._id,
+    });
+
+    const dailyLogIds = dailyLogs.map((dailyLog) => dailyLog._id);
+
+    return { dailyLogIds, ...isExist };
   }
 
   async clickLike(_id: number, userId: number): Promise<void> {
-    const isExist = this.calendarRepository.findOneBy({
+    const isExist = await this.calendarRepository.findOneBy({
       _id: _id,
     });
 
@@ -69,10 +84,27 @@ export class CalendarService {
       });
     }
 
-    await this.calendarRepository.update(
-      { _id: _id },
-      { like: (await isExist).like + 1 },
-    );
+    const isLike = await this.likeRespository.findOneBy({
+      userId: userId,
+      calendarId: isExist._id,
+    });
+
+    if (isLike) {
+      await this.calendarRepository.update(
+        { _id: isExist._id },
+        { like: isExist.like - 1 },
+      );
+      await this.likeRespository.delete({ _id: isLike._id });
+    } else {
+      await this.calendarRepository.update(
+        { _id: isExist._id },
+        { like: isExist.like + 1 },
+      );
+      await this.likeRespository.create({
+        userId: userId,
+        calendarId: isExist._id,
+      });
+    }
   }
 
   async update(
@@ -110,5 +142,19 @@ export class CalendarService {
     }
 
     await this.calendarRepository.delete({ userId: userId });
+  }
+
+  async getCommunity(job: number): Promise<GetCommunityResponseDto> {
+    const users = await this.userRepository.findBy({ job: job });
+    const today = new Date();
+    const calendars = [];
+    users.forEach(async (user) => {
+      const calendar = await this.calendarRepository.findOneBy({
+        userId: user._id,
+        month: today.getMonth() + 1,
+      });
+      calendars.push(calendar);
+    });
+    return calendars;
   }
 }

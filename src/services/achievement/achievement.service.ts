@@ -20,18 +20,6 @@ export class AchievementService {
     userId: number,
     newAchievement: CreateAchievementRequestDto,
   ): Promise<CreateAchievementResponseDto> {
-    const isExist = await this.achievementRepository.findOneBy({
-      userId: userId,
-      dailyLogId: newAchievement.dailyLogId,
-    });
-
-    if (isExist) {
-      throw new ForbiddenException({
-        statusCode: HttpStatus.FORBIDDEN,
-        message: [`이미 만들어져있는 achievement 정보임`],
-      });
-    }
-
     return await this.achievementRepository.save({
       userId: userId,
       dailyLogId: newAchievement.dailyLogId,
@@ -49,7 +37,6 @@ export class AchievementService {
   ): Promise<GetAchievementResponseDto> {
     const isExist = await this.achievementRepository.findOneBy({
       _id: _id,
-      userId: userId,
     });
 
     if (!isExist) {

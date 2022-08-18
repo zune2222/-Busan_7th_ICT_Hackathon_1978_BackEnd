@@ -12,7 +12,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(loginId: string, password: string): Promise<any> {
     const loginUserDto: LoginUserDto = {
-      loginId: loginId,
+      id: loginId,
       password: password,
     };
 

@@ -18,7 +18,7 @@ export class User {
   nickname: string;
 
   @Column()
-  room: string;
+  room: string | null;
 
   @Column()
   visible: boolean;

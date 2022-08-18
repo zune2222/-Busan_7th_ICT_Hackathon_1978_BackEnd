@@ -8,10 +8,7 @@ import {
   CreateUserRequestDto,
   CreateUserResponseDto,
 } from './dto/create-user.dto';
-import {
-  UpdateRoomRequestDto,
-  UpdateRoomResponseDto,
-} from './dto/update-room.dto';
+import { UpdateRoomRequestDto } from './dto/update-room.dto';
 
 @Injectable()
 export class UserService {
@@ -22,7 +19,7 @@ export class UserService {
 
   async create(newUser: CreateUserRequestDto): Promise<CreateUserResponseDto> {
     const isExist = await this.userRepository.findOneBy({
-      loginId: newUser.loginId,
+      loginId: newUser.id,
     });
     if (isExist) {
       throw new ForbiddenException({
@@ -33,13 +30,16 @@ export class UserService {
     }
 
     newUser.password = await bcrypt.hash(newUser.password, 10);
-    const { password, ...result } = await this.userRepository.save(newUser);
+    const { password, ...result } = await this.userRepository.save({
+      ...newUser,
+      visible: true,
+    });
     return result;
   }
 
   async toggleVisible(userId: number): Promise<void> {
     const isExist = await this.userRepository.findOneBy({
-      userId: userId,
+      _id: userId,
     });
 
     if (!isExist) {
@@ -51,7 +51,7 @@ export class UserService {
     }
 
     await this.userRepository.update(
-      { userId: userId },
+      { _id: userId },
       { visible: !isExist.visible },
     );
   }
@@ -74,9 +74,9 @@ export class UserService {
   async updateRoom(
     userId: number,
     newRoom: UpdateRoomRequestDto,
-  ): Promise<UpdateRoomResponseDto> {
+  ): Promise<void> {
     const isExist = this.userRepository.findOneBy({
-      userId: userId,
+      _id: userId,
     });
 
     if (!isExist) {
@@ -89,13 +89,15 @@ export class UserService {
 
     await this.userRepository.update(
       {
-        userId: userId,
+        _id: userId,
       },
       {
-        room: newRoom.room,
+        room: JSON.stringify(newRoom.room),
       },
     );
+  }
 
-    return this.userRepository.findOneBy({ userId: userId });
+  async nagging(userId: number, dailyLogId: number): Promise<string> {
+    return '집 가고싶다';
   }
 }

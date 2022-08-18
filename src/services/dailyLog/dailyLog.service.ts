@@ -1,5 +1,6 @@
 import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Achievement } from 'src/entities/achievement.entity';
 import { DailyLog } from 'src/entities/dailyLog.entity';
 import { Repository } from 'typeorm';
 import {
@@ -15,6 +16,8 @@ export class DailyLogService {
   constructor(
     @InjectRepository(DailyLog)
     private dailyLogRepository: Repository<DailyLog>,
+    @InjectRepository(Achievement)
+    private achievementRepository: Repository<Achievement>,
   ) {}
 
   async create(
@@ -70,7 +73,13 @@ export class DailyLogService {
       });
     }
 
-    return isExist;
+    const achievements = await this.achievementRepository.findBy({
+      dailyLogId: isExist._id,
+    });
+
+    const achievementIds = achievements.map((achievement) => achievement._id);
+
+    return { achievementIds, ...isExist };
   }
 
   async update(updateDailyLogDto: UpdateDailyLogDto): Promise<void> {

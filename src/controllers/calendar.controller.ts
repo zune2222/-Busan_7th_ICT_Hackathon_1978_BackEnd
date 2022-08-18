@@ -18,6 +18,7 @@ import {
 import { GetCalendarAllResponseDto } from 'src/services/calendar/dto/get-all';
 import { GetCalendarResponseDto } from 'src/services/calendar/dto/get-calendar.dto';
 import { UpdateCalendarRequestDto } from 'src/services/calendar/dto/update-calendar.dto';
+import { GetCommunityResponseDto } from 'src/services/user/dto/get-community.dto';
 
 @Controller('/')
 export class CalendarController {
@@ -59,5 +60,11 @@ export class CalendarController {
   @Delete('auth/user/:userId')
   delete(@Param('userId') userId: number): Promise<void> {
     return this.calendarService.delete(userId);
+  }
+
+  @Get('auth/community/:job')
+  @UseGuards(JwtAuthGuard)
+  getCommunity(@Param('job') job: number): Promise<GetCommunityResponseDto> {
+    return this.calendarService.getCommunity(job);
   }
 }

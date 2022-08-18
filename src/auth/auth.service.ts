@@ -16,7 +16,7 @@ export class AuthService {
 
   async validateUser(loginUserDto: LoginUserDto): Promise<any> {
     const user = await this.userRepository.findOneBy({
-      loginId: loginUserDto.loginId,
+      loginId: loginUserDto.id,
     });
 
     if (!user) {
@@ -43,7 +43,7 @@ export class AuthService {
 
   async login(user: LoginUserDto) {
     const payload = {
-      loginId: user.loginId,
+      loginId: user.id,
     };
 
     return {
