@@ -2,10 +2,10 @@ import { IsDate, IsNumber, IsString } from 'class-validator';
 
 export class UpdateDailyLogDto {
   @IsString()
-  userId: string;
+  userId: number;
 
   @IsString()
-  calendarId: string;
+  calendarId: number;
 
   @IsNumber()
   progress: number;

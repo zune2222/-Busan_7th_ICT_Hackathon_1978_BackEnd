@@ -6,10 +6,10 @@ export class DailyLog {
   _id: number;
 
   @Column()
-  userId: string;
+  userId: number;
 
   @Column()
-  calendarId: string;
+  calendarId: number;
 
   @Column()
   date: Date;

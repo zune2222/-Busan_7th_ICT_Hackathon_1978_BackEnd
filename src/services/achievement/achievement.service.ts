@@ -16,12 +16,13 @@ export class AchievementService {
     private achievementRepository: Repository<Achievement>,
   ) {}
 
-  async create(
+  async createAchievement(
+    userId: number,
     newAchievement: CreateAchievementRequestDto,
   ): Promise<CreateAchievementResponseDto> {
     const isExist = await this.achievementRepository.findOneBy({
+      userId: userId,
       dailyLogId: newAchievement.dailyLogId,
-      title: newAchievement.title,
     });
 
     if (isExist) {
@@ -31,16 +32,24 @@ export class AchievementService {
       });
     }
 
-    return await this.achievementRepository.save(newAchievement);
+    return await this.achievementRepository.save({
+      userId: userId,
+      dailyLogId: newAchievement.dailyLogId,
+      title: newAchievement.title,
+      startTime: newAchievement.startTime,
+      endTime: newAchievement.endTime,
+      progress: 0,
+      position: newAchievement.position,
+    });
   }
 
   async getAchievement(
-    dailyLogId: string,
-    title: string,
+    userId: number,
+    _id: number,
   ): Promise<GetAchievementResponseDto> {
     const isExist = await this.achievementRepository.findOneBy({
-      dailyLogId: dailyLogId,
-      title: title,
+      _id: _id,
+      userId: userId,
     });
 
     if (!isExist) {

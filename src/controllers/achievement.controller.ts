@@ -6,7 +6,9 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AchievementService } from 'src/services/achievement/achievement.service';
 import {
   CreateAchievementRequestDto,
@@ -15,23 +17,29 @@ import {
 import { GetAchievementResponseDto } from 'src/services/achievement/dto/get-achievement.dto';
 import { UpdateAchievementRequestDto } from 'src/services/achievement/dto/update-achievement.dto';
 
-@Controller('achievement')
+@Controller('auth/user')
 export class AchievementController {
   constructor(private readonly achievementService: AchievementService) {}
 
-  @Post()
-  create(
+  @Post(':userId/achievement')
+  @UseGuards(JwtAuthGuard)
+  createAchievement(
+    @Param('userId') userId: number,
     @Body() createAchievementRequestDto: CreateAchievementRequestDto,
   ): Promise<CreateAchievementResponseDto> {
-    return this.achievementService.create(createAchievementRequestDto);
+    return this.achievementService.createAchievement(
+      userId,
+      createAchievementRequestDto,
+    );
   }
 
-  @Get(':dailyLogId/:title')
+  @Get(':userId/achievement/:achievement_id')
+  @UseGuards(JwtAuthGuard)
   getAchievement(
-    @Param('dailyLogId') dailyLogId: string,
-    @Param('title') title: string,
+    @Param('userId') userId: number,
+    @Param('achievement_id') _id: number,
   ): Promise<GetAchievementResponseDto> {
-    return this.achievementService.getAchievement(dailyLogId, title);
+    return this.achievementService.getAchievement(userId, _id);
   }
 
   @Patch()

@@ -5,8 +5,11 @@ export class UpdateAchievementRequestDto {
   @IsNumber()
   _id: number;
 
+  @IsNumber()
+  userId: number;
+
   @IsString()
-  dailyLogId: string;
+  dailyLogId: number;
 
   @IsString()
   title: string;

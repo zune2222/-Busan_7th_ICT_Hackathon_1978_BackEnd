@@ -10,9 +10,9 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super({ usernameField: 'id' });
   }
 
-  async validate(id: string, password: string): Promise<any> {
+  async validate(loginId: string, password: string): Promise<any> {
     const loginUserDto: LoginUserDto = {
-      id: id,
+      loginId: loginId,
       password: password,
     };
 

@@ -2,8 +2,8 @@ import { IsDate, IsString } from 'class-validator';
 
 interface getProgress {
   _id: number;
-  userId: string;
-  calendarId: string;
+  userId: number;
+  calendarId: number;
   date: Date;
 }
 

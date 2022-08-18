@@ -6,7 +6,7 @@ export class Calender {
   _id: number;
 
   @Column()
-  userId: string;
+  userId: number;
 
   @Column()
   month: number;

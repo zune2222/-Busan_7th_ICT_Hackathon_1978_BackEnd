@@ -1,5 +1,5 @@
 export interface GetCalendarAllDto {
-  userId: string;
+  userId: number;
   month: number;
   like: number;
 }

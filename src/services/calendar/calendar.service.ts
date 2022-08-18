@@ -7,6 +7,7 @@ import {
   CreateCalendarResponseDto,
 } from './dto/create-calendar.dto';
 import { GetCalendarAllResponseDto } from './dto/get-all';
+import { GetCalendarResponseDto } from './dto/get-calendar.dto';
 import { UpdateCalendarRequestDto } from './dto/update-calendar.dto';
 
 @Injectable()
@@ -35,24 +36,47 @@ export class CalendarService {
     return await this.calendarRepository.save(newCalender);
   }
 
-  async getByUserId(userId: string): Promise<GetCalendarAllResponseDto> {
-    const isExist = await this.calendarRepository.findBy({
+  async getCalendar(
+    userId: number,
+    month: number,
+  ): Promise<GetCalendarResponseDto> {
+    const isExist = await this.calendarRepository.findOneBy({
       userId: userId,
+      month: month,
     });
 
     if (!isExist) {
       throw new ForbiddenException({
         statusCode: HttpStatus.FORBIDDEN,
-        message: [`해당 아이디에 캘린더 정보가 없음.`],
+        message: [`해당 캘린더 정보가 존재하지 않음`],
         error: 'Forbidden',
       });
     }
 
-    return await this.calendarRepository.findBy({ userId: userId });
+    return isExist;
+  }
+
+  async clickLike(_id: number, userId: number): Promise<void> {
+    const isExist = this.calendarRepository.findOneBy({
+      _id: _id,
+    });
+
+    if (!isExist) {
+      throw new ForbiddenException({
+        statusCode: HttpStatus.FORBIDDEN,
+        message: [`해당 캘린더 정보가 존재하지 않음`],
+        error: 'Forbidden',
+      });
+    }
+
+    await this.calendarRepository.update(
+      { _id: _id },
+      { like: (await isExist).like + 1 },
+    );
   }
 
   async update(
-    userId: string,
+    userId: number,
     updateCalendar: UpdateCalendarRequestDto,
   ): Promise<void> {
     const isExist = await this.calendarRepository.findOneBy({
@@ -75,7 +99,7 @@ export class CalendarService {
     );
   }
 
-  async delete(userId: string): Promise<void> {
+  async delete(userId: number): Promise<void> {
     const isExist = await this.calendarRepository.findBy({ userId: userId });
     if (!isExist) {
       throw new ForbiddenException({
