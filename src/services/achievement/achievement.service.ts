@@ -17,11 +17,11 @@ export class AchievementService {
   ) {}
 
   async create(
-    createAchievementRequestDto: CreateAchievementRequestDto,
+    newAchievement: CreateAchievementRequestDto,
   ): Promise<CreateAchievementResponseDto> {
     const isExist = await this.achievementRepository.findOneBy({
-      dailyLogId: createAchievementRequestDto.dailyLogId,
-      title: createAchievementRequestDto.title,
+      dailyLogId: newAchievement.dailyLogId,
+      title: newAchievement.title,
     });
 
     if (isExist) {
@@ -31,7 +31,7 @@ export class AchievementService {
       });
     }
 
-    return await this.achievementRepository.save(createAchievementRequestDto);
+    return await this.achievementRepository.save(newAchievement);
   }
 
   async getAchievement(
@@ -53,12 +53,9 @@ export class AchievementService {
     return isExist;
   }
 
-  async update(
-    updateAchievementRequestDto: UpdateAchievementRequestDto,
-  ): Promise<void> {
+  async update(updateAchievement: UpdateAchievementRequestDto): Promise<void> {
     const isExist = await this.achievementRepository.findOneBy({
-      dailyLogId: updateAchievementRequestDto.dailyLogId,
-      title: updateAchievementRequestDto.title,
+      _id: updateAchievement._id,
     });
 
     if (!isExist) {
@@ -70,13 +67,14 @@ export class AchievementService {
 
     await this.achievementRepository.update(
       {
-        dailyLogId: updateAchievementRequestDto.dailyLogId,
-        title: updateAchievementRequestDto.title,
+        _id: updateAchievement._id,
       },
       {
-        startTime: updateAchievementRequestDto.startTime,
-        endTime: updateAchievementRequestDto.endTime,
-        progress: updateAchievementRequestDto.progress,
+        dailyLogId: updateAchievement.dailyLogId,
+        title: updateAchievement.title,
+        startTime: updateAchievement.startTime,
+        endTime: updateAchievement.endTime,
+        progress: updateAchievement.progress,
       },
     );
   }

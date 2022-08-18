@@ -2,6 +2,9 @@ import { Type } from 'class-transformer';
 import { IsDate, IsNumber, IsString } from 'class-validator';
 
 export class UpdateAchievementRequestDto {
+  @IsNumber()
+  _id: number;
+
   @IsString()
   dailyLogId: string;
 
