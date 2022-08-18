@@ -4,17 +4,14 @@ import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { GetByUserIdResponseDto } from './dto/get-by-userId.dto';
-import { GetAllResponseDto } from './dto/get-all.dto';
-import { CreateUserResponseDto } from './dto/create-user.dto';
-
-class CreateUserDto {
-  id: string;
-  password: string;
-  job: number;
-  major: number;
-  gender: number;
-  birthDay: Date;
-}
+import {
+  CreateUserRequestDto,
+  CreateUserResponseDto,
+} from './dto/create-user.dto';
+import {
+  UpdateRoomRequestDto,
+  UpdateRoomResponseDto,
+} from './dto/update-room.dto';
 
 @Injectable()
 export class UserService {
@@ -23,9 +20,9 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async create(newUser: CreateUserDto): Promise<CreateUserResponseDto> {
+  async create(newUser: CreateUserRequestDto): Promise<CreateUserResponseDto> {
     const isExist = await this.userRepository.findOneBy({
-      id: newUser.id,
+      loginId: newUser.loginId,
     });
     if (isExist) {
       throw new ForbiddenException({
@@ -36,18 +33,31 @@ export class UserService {
     }
 
     newUser.password = await bcrypt.hash(newUser.password, 10);
-    const result = await this.userRepository.save(newUser);
+    const { password, ...result } = await this.userRepository.save(newUser);
     return result;
   }
 
-  async getAll(): Promise<GetAllResponseDto> {
-    return this.userRepository.find({
-      select: ['_id', 'id'],
+  async toggleVisible(userId: number): Promise<void> {
+    const isExist = await this.userRepository.findOneBy({
+      userId: userId,
     });
+
+    if (!isExist) {
+      throw new ForbiddenException({
+        statusCode: HttpStatus.FORBIDDEN,
+        message: [`그런 사용자는 존재하지 않는다.`],
+        error: 'Forbidden',
+      });
+    }
+
+    await this.userRepository.update(
+      { userId: userId },
+      { visible: !isExist.visible },
+    );
   }
 
-  async getByUserId(id: string): Promise<GetByUserIdResponseDto> {
-    const isExist = await this.userRepository.findOneBy({ id: id });
+  async getByUserId(userId: number): Promise<GetByUserIdResponseDto> {
+    const isExist = await this.userRepository.findOneBy({ userId: userId });
     if (!isExist) {
       throw new ForbiddenException({
         statusCode: HttpStatus.FORBIDDEN,
@@ -56,8 +66,36 @@ export class UserService {
       });
     }
     const result = await this.userRepository.findOneBy({
-      id: id,
+      userId: userId,
     });
     return result;
+  }
+
+  async updateRoom(
+    userId: number,
+    newRoom: UpdateRoomRequestDto,
+  ): Promise<UpdateRoomResponseDto> {
+    const isExist = this.userRepository.findOneBy({
+      userId: userId,
+    });
+
+    if (!isExist) {
+      throw new ForbiddenException({
+        statusCode: HttpStatus.FORBIDDEN,
+        message: [`니가 찾는 그 유저의 room 정보는 존재하지 않음.`],
+        error: 'Forbidden',
+      });
+    }
+
+    await this.userRepository.update(
+      {
+        userId: userId,
+      },
+      {
+        room: newRoom.room,
+      },
+    );
+
+    return this.userRepository.findOneBy({ userId: userId });
   }
 }

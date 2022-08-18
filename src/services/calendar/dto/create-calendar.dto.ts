@@ -1,8 +1,8 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber } from 'class-validator';
 
 export class CreateCalendarRequestDto {
-  @IsString()
-  userId: string;
+  @IsNumber()
+  userId: number;
 
   @IsNumber()
   month: number;
@@ -13,7 +13,7 @@ export class CreateCalendarRequestDto {
 
 export interface CreateCalendarResponseDto {
   _id: number;
-  userId: string;
+  userId: number;
   month: number;
   like: number;
 }

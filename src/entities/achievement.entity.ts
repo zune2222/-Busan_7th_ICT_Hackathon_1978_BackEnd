@@ -6,7 +6,10 @@ export class Achievement {
   _id: number;
 
   @Column()
-  dailyLogId: string;
+  userId: number;
+
+  @Column()
+  dailyLogId: number;
 
   @Column()
   title: string;
@@ -19,4 +22,7 @@ export class Achievement {
 
   @Column()
   progress: number;
+
+  @Column()
+  position: number;
 }

@@ -1,5 +1,10 @@
 export interface GetAchievementResponseDto {
   _id: number;
-  dailyLogId: string;
+  userId: number;
+  dailyLogId: number;
   title: string;
+  startTime: Date;
+  endTime: Date;
+  progress: number;
+  position: number;
 }

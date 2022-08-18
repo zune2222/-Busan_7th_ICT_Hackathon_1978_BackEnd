@@ -2,8 +2,8 @@ import { Type } from 'class-transformer';
 import { IsDate, IsNumber, IsString } from 'class-validator';
 
 export class CreateAchievementRequestDto {
-  @IsString()
-  dailyLogId: string;
+  @IsNumber()
+  dailyLogId: number;
 
   @IsString()
   title: string;
@@ -17,14 +17,16 @@ export class CreateAchievementRequestDto {
   endTime: Date;
 
   @IsNumber()
-  progress: number;
+  position: number;
 }
 
 export interface CreateAchievementResponseDto {
   _id: number;
-  dailyLogId: string;
+  userId: number;
+  dailyLogId: number;
   title: string;
   startTime: Date;
   endTime: Date;
   progress: number;
+  position: number;
 }

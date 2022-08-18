@@ -3,7 +3,10 @@ import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserRequestDto {
   @IsString()
-  id: string;
+  loginId: string;
+
+  @IsNumber()
+  userId: number;
 
   @IsString()
   password: string;
@@ -32,7 +35,9 @@ export class CreateUserRequestDto {
 }
 
 export interface CreateUserResponseDto {
-  id: string;
+  _id: number;
+  loginId: string;
+  userId: number;
   job: Number;
   major: number;
   gender: number;

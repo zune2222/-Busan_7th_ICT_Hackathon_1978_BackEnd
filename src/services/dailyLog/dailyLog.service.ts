@@ -6,6 +6,7 @@ import {
   CreateDailyLogRequestDto,
   CreateDailyLogResponseDto,
 } from './dto/create-dailyLog.dto';
+import { GetDailyLogResponseDto } from './dto/get-dailyLog.dto';
 import { GetProgressResponseDto } from './dto/get-progress.dto';
 import { UpdateDailyLogDto } from './dto/update-dailyLog.dto';
 
@@ -36,7 +37,7 @@ export class DailyLogService {
     return await this.dailyLogRepository.save(createDailyLogRequestDto);
   }
 
-  async getProgress(userId: string): Promise<GetProgressResponseDto> {
+  async getProgress(userId: number): Promise<GetProgressResponseDto> {
     const isExist = await this.dailyLogRepository.findBy({
       userId: userId,
     });
@@ -45,6 +46,26 @@ export class DailyLogService {
       throw new ForbiddenException({
         statusCode: HttpStatus.FORBIDDEN,
         message: [`그런 진행도는 없음`],
+        error: 'Forbidden',
+      });
+    }
+
+    return isExist;
+  }
+
+  async getDailyLog(
+    userId: number,
+    date: Date,
+  ): Promise<GetDailyLogResponseDto> {
+    const isExist = await this.dailyLogRepository.findOneBy({
+      userId: userId,
+      date: date,
+    });
+
+    if (!isExist) {
+      throw new ForbiddenException({
+        statusCode: HttpStatus.FORBIDDEN,
+        message: [`그런 dailyLog는 존재하지 않음`],
         error: 'Forbidden',
       });
     }

@@ -2,11 +2,11 @@ import { Type } from 'class-transformer';
 import { IsDate, IsNumber, IsString } from 'class-validator';
 
 export class CreateDailyLogRequestDto {
-  @IsString()
-  userId: string;
+  @IsNumber()
+  userId: number;
 
-  @IsString()
-  calendarId: string;
+  @IsNumber()
+  calendarId: number;
 
   @Type(() => Date)
   @IsDate()
@@ -17,8 +17,8 @@ export class CreateDailyLogRequestDto {
 }
 
 export interface CreateDailyLogResponseDto {
-  userId: string;
-  calendarId: string;
+  userId: number;
+  calendarId: number;
   date: Date;
   progress: number;
 }
