@@ -9,7 +9,7 @@ export class Achievement {
   dailyLogId: string;
 
   @Column()
-  name: string;
+  title: string;
 
   @Column()
   startTime: Date;
@@ -18,5 +18,5 @@ export class Achievement {
   endTime: Date;
 
   @Column()
-  progess: number;
+  progress: number;
 }
