@@ -12,6 +12,8 @@ import { DailyLogModule } from './modules/dailyLog.module';
 import { DailyLog } from './entities/dailyLog.entity';
 import { AchievementModule } from './modules/achievement.module';
 import { Achievement } from './entities/achievement.entity';
+import { UserLog } from './entities/userLog.entity';
+import { UserLogModule } from './modules/userLog.module';
 
 @Module({
   imports: [
@@ -26,7 +28,7 @@ import { Achievement } from './entities/achievement.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Calender, DailyLog, Achievement],
+      entities: [User, Calender, DailyLog, Achievement, UserLog],
       synchronize: true,
     }),
     UserModule,
@@ -34,6 +36,7 @@ import { Achievement } from './entities/achievement.entity';
     CalendarModule,
     DailyLogModule,
     AchievementModule,
+    UserLogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
